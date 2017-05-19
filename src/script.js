@@ -3,6 +3,9 @@ scene = null;
 GUIcontrols = null;
 stats = null;
 
+//Añadimos el Listener para teclado
+window.onload= function(){document.onkeypress = playerAction;}
+
 /// Función que se llama para dibujar cada frame
 function render() {
   // La propia función se encola a sí misma para el siguiente render
@@ -11,10 +14,12 @@ function render() {
   // Se dibuja la escena
   renderer.render(scene, scene.getCamera());
 
+  //ELIMINAR DESPUES
+  scene.getCameraControls().update();
+
   // Si se tienen animaciones con TWEEN hay que actualizarlas
   TWEEN.update();
 }
-
 /// Se construye el renderer basado en WebGL
 function createRenderer () {
   var renderer = new THREE.WebGLRenderer();
@@ -31,6 +36,10 @@ function onWindowResize () {
   renderer.setSize (window.innerWidth, window.innerHeight);
 }
 
+function playerAction(evObject) {
+  scene.actionController(String.fromCharCode(evObject.which));
+}
+
 /// El main
 $(function () {
 
@@ -40,7 +49,7 @@ $(function () {
   // Se añade la salida del renderer a su elemento html
   $("#WebGL-output").append(renderer.domElement);
 
-  window.addEventListener ("resize", onWindowResize);
+  window.addEventListener("resize", onWindowResize);
 
   // Se crea la escena
   scene = new TheScene (renderer.domElement);

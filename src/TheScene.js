@@ -8,7 +8,8 @@ TheScene = function (renderer) {
   //Cámara
   var camera = null;
 
-  var key= new KeyBoard();
+  var trackballControls = null;
+  var player = null;
 
   /// Se crea la cámara, es necesario el renderer para interactuar con ella
   /**
@@ -21,9 +22,16 @@ TheScene = function (renderer) {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100000000000);
 
     // Dónde se sitúa y hacia donde mira
-    camera.position.set (0, 300, 0);
+    camera.position.set (0, 0, 300);
     var look = new THREE.Vector3 (0,0,0);
     camera.lookAt(look);
+
+    //ELIMINAR DESPUES
+    trackballControls = new THREE.TrackballControls (camera, renderer);
+    trackballControls.rotateSpeed = 5;
+    trackballControls.zoomSpeed = -2;
+    trackballControls.panSpeed = 0.5;
+    trackballControls.target = look;
   }
 
   /// Se crean las luces y se añaden a la escena
@@ -31,6 +39,23 @@ TheScene = function (renderer) {
     // Una ambiental
     ambientLight = new THREE.AmbientLight(0xffffff, 5);
     self.add (ambientLight);
+  }
+
+  this.actionController= function(action){
+    switch(action){
+      case 'a':
+        player.position.x-= 1.5;
+        break;
+      case 'd':
+        player.position.x+= 1.5;
+        break;
+      case 's':
+        player.position.y-= 1.5;
+        break;
+      case 'w':
+        player.position.y+= 1.5;
+        break;
+    }
   }
 
 
@@ -41,12 +66,19 @@ TheScene = function (renderer) {
   var createSystem = function (self) {
 
     //Creamos el objeto del jugador
-    key= e.keyCode;
-    var player= new Player(e.keyCode);
+    player= new Player();
+    player.position.set(-200, 0, 0);
 
-    player.position.set(0, 0, 200);
+/*
+    var geometry= new THREE.CubeGeometry(20, 20, 75);
+    var aspect= new THREE.MeshLambertMaterial({color: 0x25889E});
+    var object= new THREE.Mesh(geometry, aspect);
+*/
+    var bg= new Background(50000, 'estrellas.jpg');
 
+    self.add(bg);
     self.add(player);
+    //self.add(object);
   }
 
   /// Inicializador
@@ -64,6 +96,11 @@ TheScene = function (renderer) {
   /// Getter de la cámara
   this.getCamera = function () {
     return camera;
+  }
+
+  //ELIMINAR DESPUES
+  this.getCameraControls = function () {
+    return trackballControls;
   }
 
   /// Modifica el ratio de aspecto de la cámara
