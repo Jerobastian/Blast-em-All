@@ -44,16 +44,20 @@ TheScene = function (renderer) {
   this.actionController= function(action){
     switch(action){
       case 'a':
-        player.position.x-= 1.5;
+        player.position.x-= 5;
         break;
       case 'd':
-        player.position.x+= 1.5;
+        player.position.x+= 5;
         break;
       case 's':
-        player.position.y-= 1.5;
+        player.position.y-= 5;
         break;
       case 'w':
-        player.position.y+= 1.5;
+        player.position.y+= 5;
+        break;
+      case ' ':
+        var shot= new Shot(player.position.x, player.position.y);
+        this.add(shot);
         break;
     }
   }
@@ -67,18 +71,17 @@ TheScene = function (renderer) {
 
     //Creamos el objeto del jugador
     player= new Player();
-    player.position.set(-200, 0, 0);
+    player.position.x= -200;
 
-/*
-    var geometry= new THREE.CubeGeometry(20, 20, 75);
-    var aspect= new THREE.MeshLambertMaterial({color: 0x25889E});
-    var object= new THREE.Mesh(geometry, aspect);
-*/
     var bg= new Background(50000, 'estrellas.jpg');
 
     self.add(bg);
     self.add(player);
-    //self.add(object);
+  }
+
+  this.createEnemies= function(self) {
+    var enemy= new Enemy();
+    self.add(enemy);
   }
 
   /// Inicializador

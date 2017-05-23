@@ -19,6 +19,8 @@ function render() {
 
   // Si se tienen animaciones con TWEEN hay que actualizarlas
   TWEEN.update();
+
+
 }
 /// Se construye el renderer basado en WebGL
 function createRenderer () {
@@ -54,6 +56,7 @@ $(function () {
   // Se crea la escena
   scene = new TheScene (renderer.domElement);
 
+  setInterval(function(){scene.createEnemies(scene)}, 5000);
   // El primer render
   render();
 });

@@ -1,10 +1,12 @@
 Player = function(){
   THREE.Object3D.call (this);
 
-  var geometry= new THREE.CubeGeometry(10, 10, 25);
+  var geometry= new THREE.CubeGeometry(25, 10, 10);
   var aspect= new THREE.MeshLambertMaterial({color: 0x25889E});
 
-  this.add(new THREE.Mesh(geometry, aspect));
+  this.player= new THREE.Mesh(geometry, aspect);
+
+  this.add(this.player);
 }
 
 Player.prototype = Object.create (THREE.Object3D.prototype);
