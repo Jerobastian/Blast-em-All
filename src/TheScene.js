@@ -73,7 +73,7 @@ TheScene = function (renderer) {
     player= new Player();
     player.position.x= -200;
 
-    var bg= new Background(50000, 'estrellas.jpg');
+    var bg= new Background(500, 'estrellas.jpg');
 
     self.add(bg);
     self.add(player);
