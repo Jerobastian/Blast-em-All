@@ -19,10 +19,18 @@ Background= function(radio, texture){
   this.material
  );
 
+ var bg= this.background;
 
- //Situar la figura en una posicion concreta
- //this.background.geometry.applyMatrix (new THREE.Matrix4().makeTranslation (px,py,pz));
+ var rotacionInicial = { angulo : 0 };
+ var rotacionFinal = { angulo : 2 * Math.PI };
 
+ this.interpolador = new TWEEN.Tween (rotacionInicial).to(rotacionFinal, 50000)
+   .onUpdate (function(){
+     // Dentro de esta función podemos acceder a  this.elAstro  gracias a la referencia que hemos almacenado previamente en   astro
+     bg.rotation.y = rotacionInicial.angulo;
+   })
+   .repeat (Infinity)
+   .start();
 
  //Se añade el background
  this.add(this.background);
