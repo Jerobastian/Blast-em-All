@@ -3,6 +3,8 @@ scene = null;
 GUIcontrols = null;
 stats = null;
 
+REFRESH= 4000;
+
 //Añadimos el Listener para teclado
 window.onload= function(){document.onkeypress = playerAction;}
 
@@ -56,7 +58,7 @@ $(function () {
   // Se crea la escena
   scene = new TheScene (renderer.domElement);
 
-  setInterval(function(){scene.createEnemies(scene)}, 5000);
+  setInterval(function(){scene.createEnemies(scene)}, REFRESH);
   // El primer render
   render();
 });
