@@ -14,13 +14,15 @@ Player = function(){
     {
       var localVertex = geometry.vertices[vertexIndex].clone();
       var globalVertex = localVertex.applyMatrix4(this.player.matrixWorld);
-      var directionVector = globalVertex.sub(this.player.position).normalize();
+      var directionVector = globalVertex.sub(this.player.position);
+      directionVector.z= 0;
+      directionVector= directionVector.clone().normalize();
 
       //Al ser elementos con movimiento, necesitamos saber la posición exacta de los enemigos.
       //Sino, solo tendríamos una colision en el centro.
-      var ray = new THREE.Raycaster( originPoint, directionVector.clone() );
-      var collisionResults = ray.intersectObjects(enemies);
-      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
+      var ray = new THREE.Raycaster(originPoint, directionVector.clone());
+      var collisionResults = ray.intersectObjects(enemies, true);
+      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() * 2)
         colision= true;
       else {
         colision= false;

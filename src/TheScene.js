@@ -10,8 +10,7 @@ TheScene = function (renderer) {
 
   var trackballControls = null;
   var player = null;
-  var enemies = [];
-  var enemiesMesh= [];
+  var enemies= [];
   var shots = [];
   var clock= new THREE.Clock();
   var kboard= new THREEx.KeyboardState();
@@ -61,24 +60,22 @@ TheScene = function (renderer) {
   		player.position.y += moveDistance;
     if(kboard.pressed(" ")){
       var shot= new Shot(player.position.x, player.position.y);
-      shots.push(shot.getMesh());
+      shots.push(shot);
       this.add(shot);
     }
 
-    if(player.collision(enemiesMesh)){
+    if(player.collision(enemies)){
       console.log("GAME OVER HIDEPUTA. Puntuacion: %i", puntuacion);
       player.position.y= 1000000;
     }
 
 
-    for(var i= 0; i < enemies.length; i++){
-      if(enemies[i].collision(shots)){
-        enemies[i].position.y= -1000000;
+    for(var i= 0; i < shots.length; i++){
+      if(shots[i].collision(enemies)){
+        shots[i].position.y= -1000000;
         puntuacion += 10;
       }
     }
-
-
 
     //ELIMINAR TERMINADA LA PRÁCTICA
     trackballControls.update();
@@ -104,7 +101,6 @@ TheScene = function (renderer) {
   this.createEnemies= function(self) {
     var enemy= new Enemy();
     enemies.push(enemy);
-    enemiesMesh.push(enemy.getMesh());
     self.add(enemy);
   }
 

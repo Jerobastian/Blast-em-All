@@ -1,7 +1,7 @@
 Enemy = function(){
   THREE.Object3D.call(this);
 
-  var geometry= new THREE.SphereGeometry(250, 100, 100);
+  var geometry= new THREE.SphereGeometry(250);
   var aspect= new THREE.MeshLambertMaterial({color: 0xDB0000});
 
   this.enemy= new THREE.Mesh(geometry, aspect);
@@ -20,25 +20,6 @@ Enemy = function(){
     .start();
 
   this.add(this.enemy);
-
-  this.collision = function(playerShots){
-    var originPoint = this.enemy.position.clone();
-
-    for (var vertexIndex = 0; vertexIndex < geometry.vertices.length; vertexIndex++)
-    {
-      var localVertex = geometry.vertices[vertexIndex].clone();
-      var globalVertex = localVertex.applyMatrix4(this.enemy.matrixWorld);
-      var directionVector = globalVertex.sub(this.enemy.position);
-
-      var ray = new THREE.Raycaster(originPoint, directionVector.clone().normalize());
-      var collisionResults = ray.intersectObjects(playerShots);
-      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
-        return true;
-      else {
-        return false;
-      }
-    }
-  };
 
   this.getMesh = function(){
     return this.enemy;

@@ -3,7 +3,7 @@ scene = null;
 GUIcontrols = null;
 stats = null;
 
-REFRESH= 8000;
+REFRESH= 2000;
 
 /// Función que se llama para dibujar cada frame
 function render() {
