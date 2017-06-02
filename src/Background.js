@@ -14,7 +14,7 @@ Background= function(radio, texture){
  //Crear el objeto tridimensional background
  this.background =new THREE.Mesh(
   //Se crea la esfera
-  new THREE.CylinderGeometry(radio,radio,300,300,300),
+  new THREE.CylinderGeometry(radio, radio, 3000, 3000),
   //Se crea el material del background
   this.material
  );

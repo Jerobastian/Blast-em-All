@@ -3,10 +3,7 @@ scene = null;
 GUIcontrols = null;
 stats = null;
 
-REFRESH= 4000;
-
-//Añadimos el Listener para teclado
-window.onload= function(){document.onkeypress = playerAction;}
+REFRESH= 8000;
 
 /// Función que se llama para dibujar cada frame
 function render() {
@@ -16,8 +13,7 @@ function render() {
   // Se dibuja la escena
   renderer.render(scene, scene.getCamera());
 
-  //ELIMINAR DESPUES
-  scene.getCameraControls().update();
+  scene.update();
 
   // Si se tienen animaciones con TWEEN hay que actualizarlas
   TWEEN.update();
@@ -38,10 +34,6 @@ function onWindowResize () {
   scene.setCameraAspect (window.innerWidth / window.innerHeight);
   // Y también el renderer
   renderer.setSize (window.innerWidth, window.innerHeight);
-}
-
-function playerAction(evObject) {
-  scene.actionController(String.fromCharCode(evObject.which));
 }
 
 /// El main

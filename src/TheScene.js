@@ -10,6 +10,12 @@ TheScene = function (renderer) {
 
   var trackballControls = null;
   var player = null;
+  var enemies = [];
+  var enemiesMesh= [];
+  var shots = [];
+  var clock= new THREE.Clock();
+  var kboard= new THREEx.KeyboardState();
+  var puntuacion= 0;
 
   /// Se crea la cámara, es necesario el renderer para interactuar con ella
   /**
@@ -22,7 +28,7 @@ TheScene = function (renderer) {
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100000000000);
 
     // Dónde se sitúa y hacia donde mira
-    camera.position.set (0, 0, 300);
+    camera.position.set (0, 0, 3000);
     var look = new THREE.Vector3 (0,0,0);
     camera.lookAt(look);
 
@@ -41,25 +47,41 @@ TheScene = function (renderer) {
     self.add (ambientLight);
   }
 
-  this.actionController= function(action){
-    switch(action){
-      case 'a':
-        player.position.x-= 5;
-        break;
-      case 'd':
-        player.position.x+= 5;
-        break;
-      case 's':
-        player.position.y-= 5;
-        break;
-      case 'w':
-        player.position.y+= 5;
-        break;
-      case ' ':
-        var shot= new Shot(player.position.x, player.position.y);
-        this.add(shot);
-        break;
+  this.update= function(){
+    var delta = clock.getDelta(); // segundos
+  	var moveDistance = 750 * delta; // 200 pixels por segundo
+
+  	if(kboard.pressed("A"))
+  		player.position.x -= moveDistance;
+  	if(kboard.pressed("D"))
+  		player.position.x += moveDistance;
+  	if(kboard.pressed("S"))
+  		player.position.y -= moveDistance;
+  	if(kboard.pressed("W"))
+  		player.position.y += moveDistance;
+    if(kboard.pressed(" ")){
+      var shot= new Shot(player.position.x, player.position.y);
+      shots.push(shot.getMesh());
+      this.add(shot);
     }
+
+    if(player.collision(enemiesMesh)){
+      console.log("GAME OVER HIDEPUTA. Puntuacion: %i", puntuacion);
+      player.position.y= 1000000;
+    }
+
+
+    for(var i= 0; i < enemies.length; i++){
+      if(enemies[i].collision(shots)){
+        enemies[i].position.y= -1000000;
+        puntuacion += 10;
+      }
+    }
+
+
+
+    //ELIMINAR TERMINADA LA PRÁCTICA
+    trackballControls.update();
   }
 
 
@@ -71,9 +93,9 @@ TheScene = function (renderer) {
 
     //Creamos el objeto del jugador
     player= new Player();
-    player.position.x= -200;
+    player.position.x= -2000;
 
-    var bg= new Background(500, 'estrellas.jpg');
+    var bg= new Background(5000, 'estrellas.jpg');
 
     self.add(bg);
     self.add(player);
@@ -81,6 +103,8 @@ TheScene = function (renderer) {
 
   this.createEnemies= function(self) {
     var enemy= new Enemy();
+    enemies.push(enemy);
+    enemiesMesh.push(enemy.getMesh());
     self.add(enemy);
   }
 

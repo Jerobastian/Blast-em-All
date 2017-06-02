@@ -1,30 +1,40 @@
 Player = function(){
   THREE.Object3D.call (this);
 
-  var geometry= new THREE.CubeGeometry(25, 10, 10);
+  var geometry= new THREE.CubeGeometry(250, 100, 100);
   var aspect= new THREE.MeshLambertMaterial({color: 0x25889E});
 
   this.player= new THREE.Mesh(geometry, aspect);
 
-  this.colision=function(otro){
-    if (this.position.x + 12.5 < otro.x) {
-        return false;
+  this.collision=function(enemies){
+    var originPoint = this.player.position.clone();
+    var colision= false;
+
+    for (var vertexIndex = 0; vertexIndex < geometry.vertices.length; vertexIndex++)
+    {
+      var localVertex = geometry.vertices[vertexIndex].clone();
+      var globalVertex = localVertex.applyMatrix4(this.player.matrixWorld);
+      var directionVector = globalVertex.sub(this.player.position).normalize();
+
+      //Al ser elementos con movimiento, necesitamos saber la posición exacta de los enemigos.
+      //Sino, solo tendríamos una colision en el centro.
+      var ray = new THREE.Raycaster( originPoint, directionVector.clone() );
+      var collisionResults = ray.intersectObjects(enemies);
+      if ( collisionResults.length > 0 && collisionResults[0].distance < directionVector.length() )
+        colision= true;
+      else {
+        colision= false;
+      }
+
+      return colision;
     }
-    if (this.y + this.alto < otro.y) {
-        return false;
-    }
-    if (this.x > otro.x + otro.ancho) {
-        return false;
-    }
-    if (this.y > otro.y + otro.alto) {
-        return false;
-    }
-        return true;
   };
+
   this.setPosition= function(x, y){
     this.position.x= x;
     this.position.y= y;
   };
+
   this.add(this.player);
 }
 
